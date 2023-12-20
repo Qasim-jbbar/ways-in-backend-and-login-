@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const dashboard=require("./routers/Product")
 const login = require("./routers/users");
-const Client=require("./routers/Orders")
+const pools=require("./routers/Orders")
 const checkAuth = require("./middleware");
 
 const port = 3000;
@@ -13,11 +13,11 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-//الصفحه ما كامله
+
 
 app.use("/api/v1/login", checkAuth,login);
 app.use("/api/v2/dashboard", dashboard);
-app.use("/api/v3/Client", Client);
+app.use("/api/v3/pool", pools);
 
 
 app.listen(port, () => {

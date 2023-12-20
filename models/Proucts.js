@@ -1,4 +1,4 @@
-const Pool=require("../db");
+const pool=require("../db");
 
 async function getProducts(req, res) {
   try {
@@ -17,7 +17,7 @@ async function getProducts(req, res) {
 
     query += ` ORDER BY ${sortField} ${sortOrder} LIMIT ${limit} OFFSET ${(page - 1) * limit}`;
 
-    const result = await Pool.query(query);
+    const result = await pool.query(query);
     res.send(result.rows);
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -27,18 +27,18 @@ async function getProducts(req, res) {
 
 
 async function addProducts(req, res) {
-  let { name, username,department,password } = req.body;
-  const result = await Pool.query(`INSERT INTO products (name, stage)
-  VALUES ('${name}', '${department}','${username}','${password}') RETURNING *`);
+  let { name, price,discount } = req.body;
+  const result = await pool.query(`INSERT INTO products (name, price,discount)
+  VALUES ('${name}','${price}','${discount}') RETURNING *`);
   res.send(result.rows);
 }
 // '${}'
 async function updataProducts(req,res){
 
-    let{name,department}=req.body;
+    let{name,discount}=req.body;
     const id=req.params.id;
-    const result=await Pool.query(`UPDATE products
-    SET name = '${name}' , department = '${department}'
+    const result=await pool.query(`UPDATE products
+    SET name = '${name}' , discount = '${discount}'
     WHERE id = ${id} RETURNING *`);
     res.send(result.rows);
 }
@@ -46,20 +46,11 @@ async function updataProducts(req,res){
 
 async function deletProducts(req,res){
     let id=req.params.id;
-const result=await Pool.query(`DELETE FROM products
+const result=await pool.query(`DELETE FROM products
 WHERE id = ${id}
 RETURNING *`);
 res.send(result.rows);
 
-async function search(req,res) {
-
-  const result=await Pool.query('RETURNING *')
-}
-
-async function filter(req,res){
-
-  const result=await Pool.query(' RETURNING *')
-}
 
 
 }

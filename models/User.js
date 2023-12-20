@@ -1,4 +1,4 @@
-const Pool = require("../db");
+const pool = require("../db");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 
@@ -6,7 +6,7 @@ async function register(req, res) {
   let { username, password } = req.body;
 
   const hashPasswod = bcrypt.hashSync(password, 10);
-  const result = await Pool.query(`INSERT INTO users (username, password)
+  const result = await pool.query(`INSERT INTO logns (username, password)
   VALUES ('${username}', '${hashPasswod}') RETURNING *`);
 
   res.send({
@@ -18,8 +18,8 @@ async function register(req, res) {
 async function login(req, res) {
   let { username, password } = req.body;
 
-  const result = await Pool.query(
-    `SELECT * FROM users WHERE username = '${username}'`
+  const result = await pool.query(
+    `SELECT * FROM logns WHERE username = '${username}'`
   );
 
   if (result.rows.length === 0)
